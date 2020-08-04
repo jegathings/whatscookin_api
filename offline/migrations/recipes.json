@@ -1,0 +1,29 @@
+{
+    "Table": {
+        "TableName": "WhatsCookingTable",
+        "KeySchema": [
+            {
+                "AttributeName": "user_id",
+                "KeyType": "HASH"
+            },
+            {
+                "AttributeName": "recipe_id",
+                "KeyType": "RANGE"
+            }
+        ],
+        "AttributeDefinitions": [
+            {
+                "AttributeName": "user_id",
+                "AttributeType": "S"
+            },
+            {
+                "AttributeName": "recipe_id",
+                "AttributeType": "S"
+            }
+        ],
+        "ProvisionedThroughput": {
+            "ReadCapacityUnits": 1,
+            "WriteCapacityUnits": 1
+        }
+    }
+}

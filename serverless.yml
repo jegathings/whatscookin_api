@@ -1,0 +1,94 @@
+service: WhatsCookin
+
+frameworkVersion: ">=1.1.0 <2.0.0"
+
+plugins:
+  - serverless-dynamodb-local
+  - serverless-offline
+
+custom:
+  dynamodb:
+    # If you only want to use DynamoDB Local in some stages, declare them here
+    stages:
+      - dev
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+    migration:
+      dir: offline/migrations
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  environment:
+    DYNAMODB_TABLE: WhatsCookingTable
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
+
+functions:
+  create:
+    handler: recipes/create.create
+    events:
+      - http:
+          path: recipes 
+          method: post
+          cors: true
+
+  list:
+    handler: recipes/list.list
+    events:
+      - http:
+          path: recipes 
+          method: get
+          cors: true
+
+  get:
+    handler: recipes/get.get
+    events:
+      - http:
+          path: recipes/{user_id}/{recipe_id}
+          method: get
+          cors: true
+
+  update:
+    handler: recipes/update.update
+    events:
+      - http:
+          path: recipes/{user_id}/{recipe_id}
+          method: put
+          cors: true
+
+  delete:
+    handler: recipes/delete.delete
+    events:
+      - http:
+          path: recipes/{user_id}/{recipe_id}
+          method: delete
+          cors: true
+
+resources:
+  Resources:
+    WhatsCookingTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: user_id
+            AttributeType: S
+          - AttributeName: recipe_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: user_id
+            KeyType: HASH
+          - AttributeName: recipe_id
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+        TableName: WhatsCookingTable
