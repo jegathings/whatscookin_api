@@ -1,12 +1,14 @@
 'use strict';
 
-const dynamodb = require('./dynamodb');
+const dynamodb = require('../recipes/dynamodb');
 
-module.exports.list = (event, context, callback) => {
+module.exports.userlist = (event, context, callback) => {
   console.log("Start List");
-  console.log("Table ",process.env.DYNAMODB_TABLE)
+  console.log("Table ",process.env.DYNAMODB_TABLE);
+  console.log("User Id", event.pathParameters.user_id);
   const params = {
     TableName: process.env.DYNAMODB_TABLE,
+    user_id:event.pathParameters.user_id
   };
 
   // fetch all todos from the database

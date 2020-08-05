@@ -3,22 +3,17 @@
 const dynamodb = require('./dynamodb');
 
 module.exports.get = (event, context, callback) => {
-  console.log("User id", event.pathParameters);
-  console.log("recipe id", event.pathParameters.recipe_id);
-  console.log("user_id", event.pathParameters.user_id);
+  console.log("Start get");
+
   var params = {
-    KeyConditionExpression: 'user_id = :user_id and recipe_id = :recipe_id',
-    ExpressionAttributeValues: {
-      ':user_id': "jegathings@gmail.com",
-      ':recipe_id': event.pathParameters.recipe_id
+    Key:{
+      "user_id":event.pathParameters.user_id.replace('%40','@'),
+      "recipe_id":event.pathParameters.recipe_id
     },
     TableName: process.env.DYNAMODB_TABLE
   };
-  console.log("Here 1");
   console.log("Params", params);
-  // fetch todo from the database
-  dynamodb.query(params, (error, result) => {
-    // handle potential errors
+  dynamodb.get(params, (error, result) => {
     if (error) {
       console.error(error);
       callback(null, {
@@ -28,12 +23,10 @@ module.exports.get = (event, context, callback) => {
       });
       return;
     }
-    console.log("Here 2");
     console.log("Result", result);
-    // create a response
     const response = {
       statusCode: 200,
-      body: JSON.stringify(result.Items),
+      body: JSON.stringify(result.Item),
       headers: {
         'Access-Control-Allow-Origin': '*'
       },
@@ -41,4 +34,5 @@ module.exports.get = (event, context, callback) => {
     console.log("Response", response);
     callback(null, response);
   });
+  console.log("End get");
 };

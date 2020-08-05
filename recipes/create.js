@@ -18,6 +18,7 @@ module.exports.create = (event, context, callback) => {
         name: data.name,
         description: data.description,
         ingredients: data.ingredients,
+        directions: data.directions,
         image: data.image,
         url: data.url,
         createdAt: timestamp,

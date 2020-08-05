@@ -44,10 +44,10 @@ functions:
           cors: true
 
   list:
-    handler: recipes/list.list
+    handler: users/userlist.userlist
     events:
       - http:
-          path: recipes 
+          path: users/{user_id} 
           method: get
           cors: true
 
