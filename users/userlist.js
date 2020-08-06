@@ -6,13 +6,13 @@ module.exports.userlist = (event, context, callback) => {
   console.log("Start List List");
   console.log("Table ",process.env.DYNAMODB_TABLE);
   console.log("Decoded User Id", decodeURI(event.pathParameters.user_id));
-  console.log("User Id", event.pathParameters.user_id.replace('%40','@').replace('%2B','+'));
+  console.log("User Id", event.pathParameters.user_id);
 
   var params = {
     TableName: process.env.DYNAMODB_TABLE,
     FilterExpression: "user_id = :user_id",
     ExpressionAttributeValues: {
-        ":user_id": event.pathParameters.user_id.replace('%40','@').replace('%2B','+')
+        ":user_id": event.pathParameters.user_id
     }
 };
 

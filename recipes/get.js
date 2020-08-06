@@ -7,7 +7,7 @@ module.exports.get = (event, context, callback) => {
 
   var params = {
     Key:{
-      "user_id":event.pathParameters.user_id.replace('%40','@').replace('%2','+'),
+      "user_id":event.pathParameters.user_id,
       "recipe_id":event.pathParameters.recipe_id
     },
     TableName: process.env.DYNAMODB_TABLE

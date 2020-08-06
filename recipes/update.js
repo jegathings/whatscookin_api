@@ -9,7 +9,7 @@ module.exports.update = (event, context, callback) => {
   const params = {
     TableName: process.env.DYNAMODB_TABLE,
     Key: {
-      user_id: event.pathParameters.user_id.replace('%40','@').replace('%2B','+'),
+      user_id: event.pathParameters.user_id,
       recipe_id: event.pathParameters.recipe_id
     },
     ExpressionAttributeNames: {
