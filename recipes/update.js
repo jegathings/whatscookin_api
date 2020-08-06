@@ -9,7 +9,7 @@ module.exports.update = (event, context, callback) => {
   const params = {
     TableName: process.env.DYNAMODB_TABLE,
     Key: {
-      user_id: event.pathParameters.user_id.replace('%40','@'),
+      user_id: event.pathParameters.user_id.replace('%40','@').replace('%2B','+'),
       recipe_id: event.pathParameters.recipe_id
     },
     ExpressionAttributeNames: {
@@ -42,6 +42,9 @@ module.exports.update = (event, context, callback) => {
     const response = {
       statusCode: 200,
       body: JSON.stringify(result.Attributes),
+      headers: {
+        'Access-Control-Allow-Origin': '*'
+      },
     };
     callback(null, response);
   });

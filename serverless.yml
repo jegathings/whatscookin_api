@@ -57,7 +57,10 @@ functions:
       - http:
           path: recipes/{user_id}/{recipe_id}
           method: get
-          cors: true
+        cors:
+          - enabled: true
+          - origin: '*'
+          - headers: 'Content-Type,Authorization,Access-Control-Allow-Origin,Access-Control-Allow-Credentials,Access-Control-Allow-Origin'
 
   update:
     handler: recipes/update.update

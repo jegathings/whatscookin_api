@@ -3,14 +3,20 @@
 const dynamodb = require('../recipes/dynamodb');
 
 module.exports.userlist = (event, context, callback) => {
-  console.log("Start List");
+  console.log("Start List List");
   console.log("Table ",process.env.DYNAMODB_TABLE);
-  console.log("User Id", event.pathParameters.user_id);
-  const params = {
-    TableName: process.env.DYNAMODB_TABLE,
-    user_id:event.pathParameters.user_id
-  };
+  console.log("Decoded User Id", decodeURI(event.pathParameters.user_id));
+  console.log("User Id", event.pathParameters.user_id.replace('%40','@').replace('%2B','+'));
 
+  var params = {
+    TableName: process.env.DYNAMODB_TABLE,
+    FilterExpression: "user_id = :user_id",
+    ExpressionAttributeValues: {
+        ":user_id": event.pathParameters.user_id.replace('%40','@').replace('%2B','+')
+    }
+};
+
+  console.log("Params", params);
   // fetch all todos from the database
   dynamodb.scan(params, (error, result) => {
     // handle potential errors
@@ -23,12 +29,14 @@ module.exports.userlist = (event, context, callback) => {
       });
       return;
     }
-
-    // create a response
     const response = {
       statusCode: 200,
       body: JSON.stringify(result.Items),
+      headers: {
+        'Access-Control-Allow-Origin': '*'
+      },
     };
+    console.log("Response",response);
     callback(null, response);
   });
 };
