@@ -1,2 +1,9 @@
-# whatscookin_api_v2
-# whatscookin_api
+## Directions
+
+1. Clone this repo
+
+2. npm install
+
+3. run dev server with command "npm run dev"
+
+4. build final output with "npm run build"
